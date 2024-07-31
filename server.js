@@ -18,7 +18,7 @@ const generateRandomString = (length) => {
 const generateRandomUser = () => {
     return {
         email: `${generateRandomString(8)}@example.com`,
-        username: generateRandomString(8),
+        name: generateRandomString(8),
         password: generateRandomString(12)
     };
 };
@@ -27,6 +27,9 @@ const generateRandomUser = () => {
 const createUser = async () => {
     const fetch = (await import('node-fetch')).default;
     const user = generateRandomUser();
+
+    // Log the user object to verify its contents
+    console.log('Generated user object:', user);
 
     try {
         const response = await fetch('https://assignment-w4rp.onrender.com/signup', {
@@ -41,12 +44,16 @@ const createUser = async () => {
             const data = await response.json();
             console.log('User created:', data);
         } else {
-            console.error('Error creating user:', response.statusText);
+            const errorData = await response.text();
+            console.error('Error creating user:', response.statusText, errorData);
         }
     } catch (error) {
         console.error('Error creating user:', error);
     }
 };
+
+
+
 
 // Schedule the task to run every 30 minutes
 cron.schedule('*/30 * * * *', () => {
