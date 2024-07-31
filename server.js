@@ -4,13 +4,22 @@ const cron = require('node-cron');
 const app = express();
 const PORT = 3000;
 
+const generateRandomString = (length) => {
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters[randomIndex];
+    }
+    return result;
+};
+
 // Helper function to generate random email, username, and password
 const generateRandomUser = () => {
-    const randomString = () => Math.random().toString(36).substring(2, 10);
     return {
-        email: `${randomString()}@example.com`,
-        username: randomString(),
-        password: randomString()
+        email: `${generateRandomString(8)}@example.com`,
+        username: generateRandomString(8),
+        password: generateRandomString(12)
     };
 };
 
@@ -49,3 +58,4 @@ cron.schedule('*/30 * * * *', () => {
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
